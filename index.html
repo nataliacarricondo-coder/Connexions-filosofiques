@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Eina per practicar l'aplicació i la comparació d'autors de la PAU d'Història de la Filosofia.">
+  <title>Connexions filosòfiques</title>
+  <style>
+    :root{--ink:#172032;--muted:#5f6878;--paper:#fbfaf6;--card:#fff;--line:#dedbd2;--violet:#6554c0;--violet2:#ebe8ff;--gold:#c98524;--green:#19705a;--red:#a63b45;--shadow:0 14px 36px rgba(32,35,48,.10);--r:20px}
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;background:radial-gradient(circle at 100% 0,#efeaff 0,transparent 32rem),var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55}
+    button,select,textarea,input{font:inherit} button{cursor:pointer}
+    .wrap{width:min(1100px,calc(100% - 32px));margin:auto}
+    header{padding:36px 0 22px}.eyebrow{color:var(--violet);font-weight:800;text-transform:uppercase;letter-spacing:.12em;font-size:.76rem}
+    h1{font-family:Georgia,serif;font-size:clamp(2.35rem,7vw,5rem);line-height:.96;margin:.25rem 0 .8rem;letter-spacing:-.04em;max-width:850px}
+    .lead{font-size:1.08rem;color:var(--muted);max-width:720px}.source{font-size:.82rem;color:var(--muted)}
+    .source a{color:inherit}.modes{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:24px 0}
+    .mode{border:1px solid var(--line);background:rgba(255,255,255,.72);border-radius:var(--r);padding:19px;text-align:left;color:var(--ink);transition:.2s;min-height:142px}
+    .mode:hover,.mode:focus-visible{transform:translateY(-2px);box-shadow:var(--shadow);outline:3px solid transparent}
+    .mode.active{border-color:var(--violet);background:var(--violet2);box-shadow:0 0 0 2px var(--violet)}
+    .mode strong{display:block;font-size:1.1rem;margin-bottom:6px}.mode span{color:var(--muted);font-size:.92rem}
+    .panel{background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow);padding:clamp(18px,4vw,34px);margin:18px 0}
+    .hidden{display:none!important}.section-title{display:flex;justify-content:space-between;gap:16px;align-items:end;margin-bottom:18px}
+    h2,h3{font-family:Georgia,serif;margin:0} h2{font-size:1.8rem} h3{font-size:1.28rem}
+    .badge{display:inline-flex;align-items:center;border-radius:999px;padding:6px 11px;background:var(--violet2);color:var(--violet);font-weight:750;font-size:.78rem}
+    .challenge{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:12px;margin:16px 0}
+    .fact{padding:15px;border:1px solid var(--line);border-radius:16px;background:#fff}.fact small{display:block;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:800}.fact strong{display:block;margin-top:5px}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}.btn{border:0;border-radius:12px;padding:10px 15px;font-weight:780;background:var(--violet);color:white}.btn.secondary{background:white;color:var(--ink);border:1px solid var(--line)}.btn.warn{background:#fff1f1;color:var(--red);border:1px solid #efc8cc}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{margin:16px 0}.field label{font-weight:780;display:block;margin-bottom:7px}.field .help{color:var(--muted);font-size:.88rem;margin:0 0 8px}
+    textarea,input,select{width:100%;border:1px solid #c9c7c0;border-radius:12px;background:#fff;color:var(--ink);padding:11px 12px;transition:.15s} textarea{min-height:118px;resize:vertical} textarea:focus,input:focus,select:focus{outline:3px solid #dcd5ff;border-color:var(--violet)}
+    .steps{display:flex;gap:7px;flex-wrap:wrap;margin:18px 0}.step{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);background:#fff;font-weight:800;color:var(--muted)}.step.done{background:var(--green);color:#fff;border-color:var(--green)}
+    details{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:#fff;margin:10px 0}summary{cursor:pointer;font-weight:780}.reading{font-size:.9rem;color:var(--muted)}
+    .rubric{width:100%;border-collapse:collapse;margin-top:14px}.rubric th,.rubric td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}.rubric th{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.rubric select{min-width:170px}
+    .meter{height:10px;border-radius:99px;background:#e8e6e0;overflow:hidden}.meter>div{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--green));transition:.3s}.scoreline{display:flex;justify-content:space-between;gap:10px;margin-top:8px;font-weight:780}
+    .note{padding:13px 15px;border-left:4px solid var(--gold);background:#fff7e7;border-radius:0 12px 12px 0;color:#58451d;font-size:.9rem}
+    .train-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.train-tab{border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px;text-align:left;font-weight:780;color:var(--ink)}.train-tab.active{background:var(--violet2);border-color:var(--violet);color:var(--violet)}
+    .concept-links{display:flex;gap:7px;flex-wrap:wrap;margin-top:18px;padding-top:14px;border-top:1px dashed var(--line)}.concept-links small{width:100%;color:var(--muted);font-weight:750}.concept-link{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:6px 10px;background:#f2f0ea;color:#3c4350;text-decoration:none;font-size:.82rem;font-weight:750}.concept-link:hover,.concept-link:focus{background:var(--violet2);color:var(--violet);outline:2px solid var(--violet)}
+    .quiz-head{display:flex;justify-content:space-between;gap:14px;align-items:center;margin:18px 0}.quiz-type{text-transform:uppercase;letter-spacing:.09em;color:var(--violet);font-size:.76rem;font-weight:850}.quiz-card{border:1px solid var(--line);border-radius:20px;padding:clamp(17px,3vw,26px);background:#fff}.quiz-card blockquote{margin:12px 0;padding:14px 18px;border-left:4px solid var(--violet);background:#f7f5ff;font-family:Georgia,serif;font-size:1.08rem}.options{display:grid;gap:9px;margin:18px 0}.option{border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px 14px;text-align:left;color:var(--ink)}.option:hover{border-color:var(--violet)}.option.selected{box-shadow:0 0 0 2px var(--violet);border-color:var(--violet)}.option.correct{background:#e8f6f0;border-color:var(--green);color:#105240}.option.wrong{background:#fff0f1;border-color:var(--red);color:#7c2932}.feedback{padding:14px 16px;border-radius:14px;margin:14px 0}.feedback.ok{background:#e8f6f0;color:#105240}.feedback.ko{background:#fff0f1;color:#7c2932}.feedback strong{display:block;margin-bottom:3px}.match-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;align-items:center;margin:14px 0}.match-grid label{font-weight:780}.order-list{display:grid;gap:8px;margin:14px 0}.order-item{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff}.order-buttons{margin-left:auto;display:flex;gap:5px}.mini{border:1px solid var(--line);background:#fff;border-radius:8px;padding:3px 9px}.progress-dots{display:flex;gap:5px}.progress-dots i{width:9px;height:9px;border-radius:50%;background:#d9d6cf}.progress-dots i.done{background:var(--green)}.progress-dots i.current{background:var(--violet);transform:scale(1.25)}
+    footer{padding:28px 0 50px;color:var(--muted);font-size:.86rem}
+    @media(max-width:760px){.modes,.challenge,.grid2,.train-nav{grid-template-columns:1fr}.mode{min-height:0}.section-title,.quiz-head{align-items:start;flex-direction:column}.rubric{display:block;overflow-x:auto}.match-grid{grid-template-columns:1fr}h1{font-size:3rem}}
+    @media print{body{background:#fff}.modes,.actions,.source,.no-print{display:none!important}.panel{box-shadow:none;border:0;padding:0}.wrap{width:100%}textarea{border:0;min-height:auto;overflow:visible}.hidden{display:none!important}}
+    /* Estètica inspirada en la versió publicada de Connexions filosòfiques */
+    :root{--ink:#13211d;--muted:#567061;--paper:#f6f5f0;--card:#fffefd;--line:#d9ddd5;--violet:#4263d7;--violet2:#e8edff;--gold:#c8943d;--green:#5b8c69;--red:#a63b45;--shadow:0 12px 26px rgba(19,33,29,.06);--r:22px}
+    body{background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+    .wrap{width:min(1820px,calc(100% - 64px))}
+    .site-header{border-bottom:1px solid var(--line);background:rgba(246,245,240,.94)}
+    .topbar{height:144px;display:flex;align-items:center;justify-content:space-between;gap:28px}
+    .brand{display:flex;align-items:center;gap:18px;text-decoration:none;color:var(--ink);min-width:max-content}.brand-mark{position:relative;width:108px;height:76px}.brand-mark:before,.brand-mark:after{content:"";position:absolute;width:70px;height:2px;background:#5f766b;left:15px;top:35px;transform:rotate(31deg)}.brand-mark:after{transform:rotate(-31deg)}.brand-dot{position:absolute;width:21px;height:21px;border-radius:50%;background:#2d5bd2;border:3px solid var(--paper)}.brand-dot.one{left:2px;bottom:3px}.brand-dot.two{left:50px;top:4px;background:#5b8c69}.brand-dot.three{right:1px;bottom:0;background:#5b8c69}.brand-dot.four{right:20px;top:19px}.brand-copy strong{display:block;font-size:2.1rem;line-height:1.06;letter-spacing:-.03em}.brand-copy span{display:block;color:var(--green);font-size:1.18rem;margin-top:7px}
+    .top-nav{display:flex;align-items:stretch;height:100%;gap:12px}.top-nav button{border:0;background:transparent;color:var(--ink);padding:0 28px;font-size:1.35rem;cursor:pointer;position:relative}.top-nav button:hover,.top-nav button.active{color:var(--green);font-weight:760}.top-nav button.active:after{content:"";height:4px;background:var(--green);position:absolute;bottom:0;left:20px;right:20px}
+    header .hero{display:grid;grid-template-columns:1.35fr .65fr;align-items:center;min-height:510px;gap:40px;padding:62px 0 54px}.hero .eyebrow{color:var(--green);font-size:1rem;letter-spacing:.12em}.hero h1{font-family:inherit;font-weight:480;font-size:clamp(4rem,6.5vw,7.4rem);line-height:.93;letter-spacing:-.07em;max-width:980px;margin:25px 0}.hero .lead{font-size:1.85rem;line-height:1.45;color:#3e5148;max-width:1020px}.hero .source{font-size:.92rem;color:var(--muted)}
+    .hero-visual{height:360px;position:relative;min-width:410px;display:grid;place-items:center}.sample-card{width:min(100%,460px);position:relative;border:1px solid var(--line);border-radius:26px;background:#fffefd;padding:28px;box-shadow:var(--shadow);overflow:hidden}.sample-card:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:#eef2eb;right:-85px;top:-85px;z-index:0}.sample-card>*{position:relative;z-index:1}.sample-label{display:block;color:var(--green);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;font-weight:850;margin-bottom:12px}.sample-card h3{font-size:1.7rem;line-height:1.08;max-width:310px;margin-bottom:24px}.sample-flow{display:grid;gap:10px}.sample-node{border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px 14px;font-size:.9rem;display:flex;gap:10px;align-items:center}.sample-node i{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;font-style:normal;font-weight:850;background:#e2ebe3;color:var(--green)}.sample-node.authors i{background:#e7ebff;color:#4163d5}.sample-node.case i{background:#fff1d9;color:#a76d12}.sample-start{display:inline-flex;align-items:center;gap:8px;margin-top:20px;color:var(--green);font-weight:800;text-decoration:none}.sample-start:hover{text-decoration:underline}
+    .modes{position:relative;grid-template-columns:repeat(4,1fr);gap:26px;background:var(--card);border:1px solid var(--line);border-radius:30px 30px 0 0;padding:105px 24px 28px;margin:0;box-shadow:none}.modes:before{content:"Tria un itinerari";position:absolute;left:36px;top:28px;font-size:2.2rem;letter-spacing:-.04em;color:var(--ink)}.mode{position:relative;min-height:118px;border-radius:18px;border-color:var(--line);background:transparent;padding:27px 25px 20px 94px}.mode:before{content:"◌";position:absolute;left:25px;top:28px;display:grid;place-items:center;width:50px;height:50px;border-radius:50%;background:#e2ebe3;color:var(--ink);font-size:2.15rem;line-height:1}.mode strong{font-size:1.19rem;margin:0 0 5px}.mode span{font-size:.88rem;line-height:1.35}.mode.active{border:3px solid var(--green);background:#fff;box-shadow:none}.mode.active:after{content:"✓";position:absolute;right:20px;top:25px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:#fff;font-size:1.45rem;font-weight:800}
+    main.wrap{padding-bottom:45px}.panel{border-radius:28px;background:var(--card);box-shadow:none;padding:clamp(24px,4vw,52px);margin:24px 0}.panel h2,.panel h3{font-family:inherit;letter-spacing:-.04em}.panel h2{font-size:2.35rem}.badge{background:#e2ebe3;color:var(--green);padding:7px 12px}.challenge{gap:18px}.fact,.quiz-card{border-radius:18px;background:#fff;border-color:var(--line)}.fact{padding:21px}.fact small,.quiz-type{color:var(--green)}.btn{background:var(--green);border-radius:13px}.btn.secondary{border-color:#aab9ae}.btn.secondary:hover,.train-tab.active{background:#eef4ed;border-color:var(--green);color:var(--ink)}.train-tab,.option,.order-item{border-radius:14px}.option:hover,.option.selected{border-color:var(--green)}.option.selected{box-shadow:0 0 0 2px var(--green)}textarea:focus,input:focus,select:focus{outline-color:#dcebdc;border-color:var(--green)}.concept-link{background:#e8efe8;color:#315d3d}.concept-link:hover,.concept-link:focus{background:#d8e7da;color:#244b2e;outline-color:var(--green)}
+    @media(max-width:980px){.wrap{width:min(100% - 32px,900px)}.topbar{height:auto;padding:22px 0;align-items:flex-start}.brand-mark{width:64px;height:52px;transform:scale(.7);transform-origin:left top}.brand{gap:2px}.brand-copy strong{font-size:1.4rem}.brand-copy span{font-size:.95rem}.top-nav{height:auto;gap:0}.top-nav button{padding:9px 12px;font-size:1rem}.top-nav button.active:after{display:none}header .hero{grid-template-columns:1fr;min-height:auto;padding:44px 0}.hero-visual{height:auto;min-width:0}.sample-card{max-width:none}.hero h1{font-size:clamp(3.5rem,11vw,5.4rem)}.hero .lead{font-size:1.35rem}.modes{grid-template-columns:1fr 1fr;padding-top:90px;gap:12px}.modes:before{font-size:1.7rem;left:23px}.mode{padding-left:78px}.mode:before{left:18px}.mode.active:after{display:none}}
+    @media(max-width:560px){.topbar{display:block}.top-nav{margin-top:16px;justify-content:space-between}.top-nav button{padding:7px 4px;font-size:.88rem}.modes{grid-template-columns:1fr}.mode{min-height:92px}.mode span{display:none}}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <div class="topbar">
+        <a class="brand" href="#inici" aria-label="Inici de Connexions filosòfiques">
+          <span class="brand-mark" aria-hidden="true"><i class="brand-dot one"></i><i class="brand-dot two"></i><i class="brand-dot three"></i><i class="brand-dot four"></i></span>
+          <span class="brand-copy"><strong>Connexions filosòfiques</strong><span>2n de batxillerat</span></span>
+        </a>
+        <nav class="top-nav" aria-label="Navegació principal">
+          <button class="active" data-navmode="guiada">▦&nbsp; Reptes</button>
+          <button data-navmode="training">◉&nbsp; Entrena</button>
+          <button data-scrollto="rubricTitle">◷&nbsp; Progrés</button>
+        </nav>
+      </div>
+      <div class="hero" id="inici">
+        <div>
+          <div class="eyebrow">Taller d’argumentació</div>
+          <h1>Connecta idees.<br>Construeix arguments.</h1>
+          <p class="lead">Practica la comparació entre autors, aplica les seves tesis a problemes actuals i prepara respostes rigoroses per a les PAU.</p>
+          <p class="source">Basat en el model d’Història de la Filosofia de la PAU 2026. <a href="https://universitats.gencat.cat/ca/pau/materies-pau/historia-filosofia/index.html" target="_blank" rel="noopener">Consulta la font oficial</a>.</p>
+        </div>
+        <div class="hero-visual">
+          <aside class="sample-card" aria-label="Exemple d'un repte filosòfic">
+            <span class="sample-label">Exemple de repte</span>
+            <h3>Podem confiar en allò que percebem?</h3>
+            <div class="sample-flow">
+              <div class="sample-node"><i>?</i><span><strong>Problema</strong><br>Percepció i veritat</span></div>
+              <div class="sample-node authors"><i>↔</i><span><strong>Autors</strong><br>Plató i Descartes</span></div>
+              <div class="sample-node case"><i>↗</i><span><strong>Cas actual</strong><br>Imatges creades amb IA</span></div>
+            </div>
+            <a class="sample-start" href="#itineraris">Explora els itineraris →</a>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="modes no-print" id="itineraris" aria-label="Modalitats">
+      <button class="mode" data-mode="training"><strong>00 · Entrenament PAU</strong><span>Activitats autocorrectives de conceptes, fragments, comparació i aplicació.</span></button>
+      <button class="mode active" data-mode="guiada"><strong>01 · Connexió guiada</strong><span>Repte proposat, preguntes pas a pas, lectures de referència i ajudes d’estructura.</span></button>
+      <button class="mode" data-mode="pau"><strong>02 · Repte PAU</strong><span>Problema i autors. Planifica i redacta una resposta cohesionada amb menys bastida.</span></button>
+      <button class="mode" data-mode="lliure"><strong>03 · Connexió lliure</strong><span>Escull autors, formula el cas contemporani i construeix una comparació pròpia.</span></button>
+    </section>
+
+    <section class="panel hidden" id="trainingPanel">
+      <div class="section-title"><div><span class="badge">Autocorrectiu</span><h2>Entrenament PAU</h2></div><div class="scoreline"><span id="trainScore">0 encerts</span></div></div>
+      <p class="lead">Practica els coneixements necessaris abans d’aplicar-los en una redacció. Cada resposta ofereix una correcció immediata i una explicació.</p>
+      <div class="train-nav no-print">
+        <button class="train-tab active" data-trackname="conceptes">Conceptes PAU<br><small>Definicions, autors i relacions</small></button>
+        <button class="train-tab" data-trackname="fragments">Treball amb fragments<br><small>Resum, estructura i pertinència</small></button>
+        <button class="train-tab" data-trackname="aplicacio">Autors en acció<br><small>Comparació i casos actuals</small></button>
+      </div>
+      <div class="quiz-head"><div><div class="quiz-type" id="quizType"></div><h3 id="quizTitle"></h3></div><div class="progress-dots" id="quizProgress"></div></div>
+      <div class="quiz-card" id="quizCard"></div>
+      <div id="quizFeedback" class="feedback hidden" role="status"></div>
+      <div class="actions no-print"><button class="btn" id="checkQuiz">Comprova</button><button class="btn secondary hidden" id="nextQuiz">Següent activitat →</button><button class="btn secondary" id="retryTrack">Reinicia l’itinerari</button></div>
+      <p class="note">Aquestes activitats comproven respostes tancades. La redacció i la qualitat global d’una argumentació continuen requerint autoavaluació o revisió docent.</p>
+    </section>
+
+    <section class="panel" id="workspace">
+      <div class="section-title"><div><span class="badge" id="modeBadge">Connexió guiada</span><h2 id="panelTitle">Construeix la connexió pas a pas</h2></div><div class="source" id="saveStatus" role="status">Desament local activat</div></div>
+
+      <div id="presetArea">
+        <div class="challenge">
+          <div class="fact"><small>Problema</small><strong id="problemText"></strong></div>
+          <div class="fact"><small>Autors</small><strong id="authorsText"></strong></div>
+          <div class="fact"><small>Situació actual</small><strong id="caseText"></strong></div>
+        </div>
+        <div class="actions no-print"><button class="btn secondary" id="newChallenge">↻ Nou repte</button><button class="btn secondary" id="toggleReadings">Lectures seleccionades</button></div>
+      </div>
+
+      <div id="freeSetup" class="hidden">
+        <div class="grid2">
+          <div class="field"><label for="authorA">Primer autor/a</label><select id="authorA"></select></div>
+          <div class="field"><label for="authorB">Segon autor/a</label><select id="authorB"></select></div>
+        </div>
+        <div class="field"><label for="freeProblem">Problema filosòfic</label><input id="freeProblem" placeholder="Ex.: Podem confiar en allò que percebem?"></div>
+        <div class="field"><label for="freeCase">Situació contemporània</label><input id="freeCase" placeholder="Ex.: Imatges creades mitjançant IA"></div>
+      </div>
+
+      <div id="readings" class="hidden">
+        <details open><summary>Materials de referència dels autors del repte</summary><div id="readingContent" class="reading"></div></details>
+      </div>
+
+      <div class="steps no-print" id="steps" aria-label="Progrés"></div>
+
+      <div id="guidedFields">
+        <div class="grid2">
+          <div class="field"><label for="thesisA">1. Quina tesi defensaria el primer autor?</label><p class="help">Formula una idea pertinent per al problema; evita explicar tota la seva filosofia.</p><textarea id="thesisA" data-track placeholder="Tesi, raons i conceptes necessaris..."></textarea></div>
+          <div class="field"><label for="thesisB">2. Quina tesi defensaria el segon autor?</label><p class="help">Explica com respondria al mateix problema i per què.</p><textarea id="thesisB" data-track placeholder="Tesi, raons i conceptes necessaris..."></textarea></div>
+        </div>
+        <div class="grid2">
+          <div class="field"><label for="agreement">3. En què coincidirien?</label><p class="help">Busca una coincidència real, encara que parteixin de fonaments diferents.</p><textarea id="agreement" data-track placeholder="Coincideixen en... perquè..."></textarea></div>
+          <div class="field"><label for="difference">4. En què discreparien?</label><p class="help">Identifica el punt exacte on les respostes se separen.</p><textarea id="difference" data-track placeholder="Discrepen sobre... ja que..."></textarea></div>
+        </div>
+        <div class="field"><label for="concepts">5. Quins conceptes permeten establir la relació?</label><p class="help">Escriu els conceptes i explica la funció que tenen en la comparació.</p><textarea id="concepts" data-track placeholder="No facis només una llista: relaciona cada concepte amb el problema."></textarea></div>
+        <div class="field"><label for="application">6. Com s’apliquen les dues perspectives al cas actual?</label><p class="help">Fes referència concreta a la situació; no la deixis com un exemple decoratiu.</p><textarea id="application" data-track placeholder="Davant d’aquest cas, el primer autor... En canvi, el segon..."></textarea></div>
+        <div class="field"><label for="position">7. Quina perspectiva explica millor el cas?</label><p class="help">Pren posició, matisa-la si cal i ofereix almenys una raó.</p><textarea id="position" data-track placeholder="Considero més adequada... perquè..."></textarea></div>
+      </div>
+
+      <div class="field"><label for="finalText">Redacció final</label><p class="help" id="finalHelp">Integra les idees anteriors en una comparació argumentada, clara i cohesionada.</p><textarea id="finalText" data-track style="min-height:260px" placeholder="Redacta aquí la resposta final..."></textarea></div>
+
+      <section aria-labelledby="rubricTitle">
+        <h3 id="rubricTitle">Rúbrica d’autoavaluació</h3>
+        <p class="help">Llegeix de nou la teva resposta i selecciona el nivell que realment has assolit.</p>
+        <table class="rubric"><thead><tr><th>Criteri</th><th>Valoració</th></tr></thead><tbody>
+          <tr><td>Explica correctament el primer autor</td><td><select class="rubricSelect"><option value="0">Insuficient</option><option value="1">Parcial</option><option value="2">Complet</option></select></td></tr>
+          <tr><td>Explica correctament el segon autor</td><td><select class="rubricSelect"><option value="0">Insuficient</option><option value="1">Parcial</option><option value="2">Complet</option></select></td></tr>
+          <tr><td>Estableix una relació filosòfica real</td><td><select class="rubricSelect"><option value="0">No</option><option value="1">Superficial</option><option value="2">Sí</option></select></td></tr>
+          <tr><td>Aplica les teories al present</td><td><select class="rubricSelect"><option value="0">Absent</option><option value="1">Mencionada</option><option value="2">Justificada</option></select></td></tr>
+          <tr><td>Argumenta una posició pròpia</td><td><select class="rubricSelect"><option value="0">Absent</option><option value="1">Poc desenvolupada</option><option value="2">Clara</option></select></td></tr>
+        </tbody></table>
+        <div class="meter" aria-hidden="true"><div id="meterFill"></div></div><div class="scoreline"><span>Revisió completada</span><span id="rubricScore">0 / 10</span></div>
+        <p class="note">Aquesta puntuació és una autoavaluació, no una correcció automàtica del contingut. Revisa els conceptes amb els apunts, les lectures i el retorn de la docent.</p>
+      </section>
+
+      <div class="actions no-print"><button class="btn" id="printBtn">Imprimeix o desa en PDF</button><button class="btn secondary" id="downloadBtn">Descarrega el text</button><button class="btn warn" id="resetBtn">Esborra la resposta</button></div>
+    </section>
+  </main>
+
+  <footer class="wrap">Les respostes es desen només en aquest navegador. L’aplicació no utilitza comptes, bases de dades, API externes ni envia informació personal.</footer>
+
+  <script>
+    const authors={
+      "Plató":"La República: llibres II (368c–376c), IV (427c–445e) i VII (514a–520a; 532b–535a).",
+      "Descartes":"Meditacions metafísiques: parts I, II, V i VI.",
+      "Hume":"Resum (Abstract) del Tractat de la naturalesa humana.",
+      "Kant":"Fonamentació de la metafísica dels costums: seleccions de les seccions primera i segona indicades al programa PAU.",
+      "Mill":"L’utilitarisme: seccions II i IV.",
+      "Nietzsche":"Selecció de Sobre veritat i mentida en sentit extramoral, Aurora, La gaia ciència, Així parlà Zaratustra, Més enllà del bé i del mal i Genealogia de la moral.",
+      "Nussbaum":"<em>Crear capacitats</em>: seleccions del prefaci i dels capítols 1, 2, 3, 4 i 8 indicades al programa PAU. <a href=\"https://www.xtec.cat/~mcodina3/Filosofia2/Nussbaum-Crear-Capacidades.pdf\" target=\"_blank\" rel=\"noopener\">Consulta el llibre complet en obert (PDF) ↗</a>"
+    };
+    const challenges=[
+      {p:"Podem confiar en allò que percebem?",a:["Plató","Descartes"],c:"Imatges i vídeos creats mitjançant intel·ligència artificial"},
+      {p:"Com podem distingir una creença d’un coneixement justificat?",a:["Descartes","Hume"],c:"Desinformació viral a les xarxes socials"},
+      {p:"Una acció és bona per la intenció o per les conseqüències?",a:["Kant","Mill"],c:"Un algoritme mèdic que prioritza salvar el nombre més gran de persones"},
+      {p:"Totes les persones tenen oportunitats reals de viure dignament?",a:["Mill","Nussbaum"],c:"Desigualtat d’accés a l’educació digital"},
+      {p:"La moral ens allibera o ens disciplina?",a:["Kant","Nietzsche"],c:"Judicis i linxaments morals a les xarxes socials"},
+      {p:"Què fa justa una comunitat política?",a:["Plató","Nussbaum"],c:"Una ciutat que decideix com distribuir habitatge públic escàs"},
+      {p:"Tenim una identitat estable al llarg del temps?",a:["Hume","Nietzsche"],c:"Construcció de la identitat personal en perfils digitals"},
+      {p:"L’educació ha d’adaptar les persones a la societat o transformar-la?",a:["Plató","Nussbaum"],c:"Ús de la intel·ligència artificial en l’aprenentatge"}
+    ];
+    const quizBank={
+      conceptes:[
+        {kind:"mc",type:"Concepte dins d’un fragment",title:"Què significa «bona voluntat»?",stem:"Per a Kant, «la bona voluntat no és bona per allò que fa o aconsegueix». Quin sentit té aquí l’expressió?",options:["Una voluntat que sempre obté bons resultats","Una voluntat bona per si mateixa, independentment del resultat","Una voluntat acceptada per la majoria","La capacitat de satisfer els propis desitjos"],answer:1,why:"En aquesta formulació, el valor de la bona voluntat no depèn de l’èxit ni de les conseqüències obtingudes."},
+        {kind:"match",type:"Autor, concepte i definició",title:"Relaciona cada autor amb la idea corresponent",pairs:["Kant|Bona voluntat|És bona per si mateixa, no pel resultat","Mill|Utilitat|Valora les accions segons la felicitat que produeixen","Nussbaum|Capacitats|Oportunitats reals de ser i de fer","Descartes|Dubte metòdic|Procediment per buscar una certesa segura"],why:"Les associacions permeten distingir conceptes propers abans d’aplicar-los a un problema."},
+        {kind:"mc",type:"Quin autor podria defensar-ho?",title:"Identifica l’autora",stem:"Per valorar una societat no n’hi ha prou amb comptar recursos: cal observar què pot ser i fer realment cada persona.",options:["Plató","Hume","Nussbaum","Nietzsche"],answer:2,why:"La formulació correspon a l’enfocament de les capacitats de Nussbaum."},
+        {kind:"mc",type:"Completa el raonament",title:"Intenció o conseqüències?",stem:"Completa correctament: Per a ___, una acció no és moral perquè produeixi bones ___, sinó perquè es realitza per ___.",options:["Kant · conseqüències · deure","Mill · intencions · felicitat","Hume · capacitats · costum","Nietzsche · normes · utilitat"],answer:0,why:"La combinació manté la relació entre Kant, el deure i la independència del valor moral respecte de les conseqüències."},
+        {kind:"mc",type:"Detecta l’error filosòfic",title:"Aquesta frase barreja dos autors",stem:"«Per a Kant, una acció és moral quan produeix la màxima felicitat per al màxim nombre de persones.» Quina correcció és adequada?",options:["És correcta tal com està","Cal substituir Kant per Mill","Cal substituir felicitat per capacitats","Cal substituir acció per coneixement"],answer:1,why:"La valoració per la felicitat produïda correspon a l’utilitarisme de Mill, no a la moral kantiana."},
+        {kind:"mc",type:"Concepte dins d’un fragment",title:"Què és una capacitat?",stem:"En l’enfocament de Nussbaum, quina opció expressa millor una «capacitat»?",options:["Un recurs que una persona posseeix","Una habilitat innata i immutable","Una oportunitat real de ser o fer alguna cosa","La quantitat total de felicitat social"],answer:2,why:"L’enfocament diferencia la simple possessió de recursos de les oportunitats reals que té cada persona."}
+      ],
+      fragments:[
+        {kind:"mc",type:"Selecciona el millor resum",title:"Què ha de fer un bon resum PAU?",stem:"Quina opció descriu millor el resum demanat a la pregunta I?",options:["Explicar tota la filosofia de l’autor","Enumerar conceptes sense relacionar-los","Identificar les idees principals i la relació argumentativa entre elles","Donar una opinió personal sobre el text"],answer:2,why:"El model oficial demana identificar allò més important i mostrar l’estructura argumentativa bàsica del text."},
+        {kind:"order",type:"Ordena l’argument",title:"Reconstrueix l’argument de Descartes",orderPrompt:"Ordena l’argument de Descartes amb les fletxes.",items:["Conclusió: per tant, cal revisar la confiança inicial","Conseqüència: una creença pot resultar dubtosa","Punt de partida: els sentits de vegades ens enganyen","Raó: no és prudent confiar plenament en allò que ja ens ha enganyat"],order:[2,3,1,0],why:"L’ordre diferencia el punt de partida, la justificació, la conseqüència i la conclusió de l’argument cartesià."},
+        {kind:"mc",type:"Quina informació sobra?",title:"Selecciona la frase irrellevant",stem:"En una resposta sobre el dubte de Descartes, quina frase no ajuda a explicar l’afirmació concreta?",options:["Els sentits ens poden enganyar","El dubte busca una certesa resistent","Descartes va néixer a França l’any 1596","Cal examinar les creences abans d’acceptar-les"],answer:2,why:"La dada biogràfica pot ser certa, però no és pertinent per explicar el paper del dubte en l’argument."},
+        {kind:"mc",type:"Significat contextual",title:"Definir no és copiar el diccionari",stem:"Quan la PAU demana el significat d’una expressió del text, què cal fer?",options:["Donar sempre la definició del diccionari","Explicar el sentit que té per a l’autor en aquell text","Traduir-la a una altra llengua","Explicar tota l’obra de l’autor"],answer:1,why:"El significat pot ser habitual o tècnic; el que es valora és haver entès el seu ús dins del text."},
+        {kind:"mc",type:"Selecciona el millor resum",title:"Evita afegir informació externa",stem:"Un resum afirma correctament la tesi del fragment, però hi afegeix una teoria de l’autor que no hi apareix. Com s’ha de valorar?",options:["És millor perquè demostra més memòria","No és adequat: el resum s’ha de limitar al que diu el text","És correcte si la teoria és famosa","Només és incorrecte si supera les 100 paraules"],answer:1,why:"En el resum no s’ha d’explicar res que no formi part del text, encara que sigui correcte sobre l’autor."},
+        {kind:"order",type:"Ordena el raonament",title:"Estructura una comparació entre autors",orderPrompt:"Ordena els passos d’una resposta comparativa amb les fletxes.",items:["Valorar quina resposta dona millor compte del cas","Presentar el problema concret","Aplicar-hi les idees pertinents de cada autor","Explicitar la diferència entre les dues respostes"],order:[1,2,3,0],why:"Aquesta és una estructura general de comparació, no l’argument d’un autor concret. La seqüència evita començar amb una conclusió sense haver analitzat abans el cas i les perspectives."}
+      ],
+      aplicacio:[
+        {kind:"mc",type:"Aplica la teoria",title:"Una decisió mèdica difícil",stem:"Un algoritme mèdic prioritza l’opció que previsiblement salvarà més persones. Quina justificació és més propera a Mill?",options:["La decisió és correcta només si compleix una norma universal","Cal escollir l’opció que augmenta més el benestar conjunt","La decisió és correcta perquè l’ha presa una màquina","No es poden valorar mai les conseqüències"],answer:1,why:"L’opció aplica un criteri conseqüencialista orientat a la felicitat o benestar general."},
+        {kind:"mc",type:"Compara autors",title:"Kant i Mill",stem:"Quina diferència és filosòficament pertinent?",options:["Kant és antic i Mill és contemporani","Kant centra el valor moral en el deure; Mill considera les conseqüències sobre la felicitat","Kant parla de política i Mill només de ciència","Tots dos defensen exactament el mateix criteri moral"],answer:1,why:"La diferència assenyala criteris morals diferents i és pertinent per aplicar-los a una situació."},
+        {kind:"mc",type:"Aplica la teoria",title:"Educació digital i desigualtat",stem:"Dues alumnes reben la mateixa tauleta, però una no té connexió ni un espai tranquil per estudiar. Quina anàlisi s’ajusta millor a Nussbaum?",options:["La igualtat ja està garantida perquè el recurs és idèntic","Cal analitzar si totes dues tenen oportunitats reals d’utilitzar el recurs","Només importa la satisfacció mitjana del grup","La tecnologia elimina automàticament qualsevol desigualtat"],answer:1,why:"La igualtat de recursos no assegura per si sola la mateixa capacitat real d’actuar."},
+        {kind:"mc",type:"Detecta l’aplicació superficial",title:"No n’hi ha prou amb mencionar l’autor",stem:"Quina resposta aplica realment un autor al cas de les imatges generades per IA?",options:["Descartes era un filòsof modern i va escriure les Meditacions","La IA és un tema molt actual i Descartes és important","Si una imatge pot enganyar-nos, el dubte cartesià obliga a no prendre la percepció com una garantia suficient","Descartes i la IA tenen moltes coses en comú"],answer:2,why:"L’opció relaciona un element concret del cas amb una idea pertinent de l’autor i n’extreu una conseqüència."},
+        {kind:"match",type:"Compara perspectives",title:"Assigna cada afirmació",pairs:["Kant|Criteri moral|Actuar per deure","Mill|Criteri moral|Considerar les conseqüències sobre la felicitat","Nussbaum|Justícia social|Garantir oportunitats reals","Descartes|Coneixement|Sotmetre les creences al dubte"],why:"La comparació és útil quan associa cada autor amb un criteri que després pot aplicar-se al problema."},
+        {kind:"mc",type:"Exercici 2 PAU",title:"Quina resposta seria més adequada?",stem:"Davant una situació nova, què demana principalment l’exercici 2?",options:["Repetir una exposició general de l’autor","Dir només si la situació ens agrada","Fer un ús pertinent de les idees de l’autor per analitzar el problema","Escriure una biografia dels autors"],answer:2,why:"La prova avalua la comprensió comprovant si l’alumnat sap utilitzar les idees estudiades en una tasca nova."}
+      ]
+    };
+    const dictionary={
+      "bona voluntat":{label:"bona voluntat",url:"https://www.diccionariodefilosofia.es/es/diccionario/l/574-buena-voluntad.html",source:"Ferrater Mora"},
+      "deure":{label:"deure",url:"https://www.diccionariodefilosofia.es/es/diccionario/l/975-deber.html",source:"Ferrater Mora"},
+      "dubte":{label:"dubte",url:"https://www.diccionariodefilosofia.es/es/diccionario/l/1132-duda.html",source:"Ferrater Mora"},
+      "felicitat":{label:"felicitat",url:"https://www.diccionariodefilosofia.es/es/diccionario/l/1427-felicidad.html",source:"Ferrater Mora"},
+      "utilitarisme":{label:"utilitarisme",url:"https://www.diccionariodefilosofia.es/es/diccionario/l/4106-utilitarismo.html",source:"Ferrater Mora"},
+      "voluntat":{label:"voluntat",url:"https://www.diccionariodefilosofia.es/es/diccionario/l/4209-voluntad.html",source:"Ferrater Mora"},
+      "justific":{label:"justificació",url:"https://www.diccionariodefilosofia.es/es/diccionario/l/2187-justificacion.html",source:"Ferrater Mora"},
+      "veritat":{label:"veritat",url:"https://www.filosofem.cat/spip.php?article566=",source:"Filosofem"},
+      "capacitat":{label:"enfocament de les capacitats",url:"https://www.scielo.org.mx/scielo.php?pid=S1870-00632023000200199&script=sci_arttext",source:"Article acadèmic obert"}
+    };
+    const ids=["thesisA","thesisB","agreement","difference","concepts","application","position","finalText","freeProblem","freeCase"];
+    let mode="guiada", current=0, trainTrack="conceptes", trainIndex=0, trainAnswers={}, trainScore=0;
+    const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+    function populateAuthors(){["authorA","authorB"].forEach((id,i)=>{const el=$("#"+id);el.innerHTML=Object.keys(authors).map((a,n)=>`<option ${n===i?'selected':''}>${a}</option>`).join("")})}
+    function renderChallenge(){const x=challenges[current];$("#problemText").textContent=x.p;$("#authorsText").textContent=x.a.join(" · ");$("#caseText").textContent=x.c;$("#readingContent").innerHTML=x.a.map(a=>`<p><strong>${a}:</strong> ${authors[a]}</p>`).join("");}
+    function setMode(next){mode=next;$$('.mode').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));$("#trainingPanel").classList.toggle("hidden",mode!=="training");$("#workspace").classList.toggle("hidden",mode==="training");if(mode==="training"){renderQuiz();return}const cfg={guiada:["Connexió guiada","Construeix la connexió pas a pas"],pau:["Repte PAU","Planifica i redacta la resposta"],lliure:["Connexió lliure","Dissenya la teva pròpia connexió"]}[mode];$("#modeBadge").textContent=cfg[0];$("#panelTitle").textContent=cfg[1];$("#freeSetup").classList.toggle("hidden",mode!=="lliure");$("#presetArea").classList.toggle("hidden",mode==="lliure");$("#guidedFields").classList.toggle("hidden",mode==="pau");$("#steps").classList.toggle("hidden",mode==="pau");$("#finalHelp").textContent=mode==="pau"?"Aplica les idees pertinents dels autors al problema i compara’n les respostes. Evita exposicions generals que no responguin al cas.":"Integra les idees anteriors en una comparació argumentada, clara i cohesionada.";load();}
+    function storageKey(){return "connexions-v1-"+mode+(mode==='guiada'||mode==='pau'?'-'+current:'')}
+    function save(){const data={};ids.forEach(id=>{const e=$("#"+id);if(e)data[id]=e.value});data.authorA=$("#authorA").value;data.authorB=$("#authorB").value;data.rubric=$$('.rubricSelect').map(e=>e.value);localStorage.setItem(storageKey(),JSON.stringify(data));$("#saveStatus").textContent="Desat en aquest navegador";updateSteps();updateRubric()}
+    function load(){let data={};try{data=JSON.parse(localStorage.getItem(storageKey()))||{}}catch(e){}ids.forEach(id=>{const el=$("#"+id);if(el)el.value=data[id]||""});if(data.authorA)$("#authorA").value=data.authorA;if(data.authorB)$("#authorB").value=data.authorB;$$('.rubricSelect').forEach((e,i)=>e.value=data.rubric?.[i]||"0");updateSteps();updateRubric()}
+    function updateSteps(){const tracked=$$('#guidedFields [data-track]');$("#steps").innerHTML=tracked.map((e,i)=>`<span class="step ${e.value.trim().length>20?'done':''}" title="Pas ${i+1}">${i+1}</span>`).join("")}
+    function updateRubric(){const score=$$('.rubricSelect').reduce((s,e)=>s+Number(e.value),0);$("#rubricScore").textContent=score+" / 10";$("#meterFill").style.width=(score*10)+"%"}
+    function context(){if(mode==='lliure')return {p:$("#freeProblem").value||"(sense problema)",a:[$("#authorA").value,$("#authorB").value],c:$("#freeCase").value||"(sense situació)"};return challenges[current]}
+    function exportText(){const x=context();let out=`CONNEXIONS FILOSÒFIQUES\n\nProblema: ${x.p}\nAutors: ${x.a.join(' i ')}\nSituació: ${x.c}\n\n`;const labels={thesisA:"Tesi del primer autor",thesisB:"Tesi del segon autor",agreement:"Coincidències",difference:"Diferències",concepts:"Conceptes",application:"Aplicació al present",position:"Posició pròpia",finalText:"Redacció final"};Object.entries(labels).forEach(([id,l])=>{const e=$("#"+id);if(e&&e.value.trim())out+=`${l.toUpperCase()}\n${e.value.trim()}\n\n`});out+=`Autoavaluació: ${$("#rubricScore").textContent}\n`;const blob=new Blob([out],{type:"text/plain;charset=utf-8"}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='connexio-filosofica.txt';a.click();URL.revokeObjectURL(a.href)}
+    function renderQuiz(){const list=quizBank[trainTrack],q=list[trainIndex];trainAnswers={};$("#quizType").textContent=q.type;$("#quizTitle").textContent=q.title;$("#quizFeedback").className="feedback hidden";$("#checkQuiz").classList.remove("hidden");$("#nextQuiz").classList.add("hidden");$("#quizProgress").innerHTML=list.map((_,i)=>`<i class="${i<trainIndex?'done':''} ${i===trainIndex?'current':''}"></i>`).join("");if(q.kind==='mc'){$("#quizCard").innerHTML=`<p>${q.stem}</p><div class="options">${q.options.map((o,i)=>`<button class="option" data-choice="${i}">${o}</button>`).join('')}</div>`;$$('[data-choice]').forEach(b=>b.addEventListener('click',()=>{$$('[data-choice]').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');trainAnswers.choice=Number(b.dataset.choice)}))}else if(q.kind==='match'){const defs=q.pairs.map(p=>p.split('|')[2]);$("#quizCard").innerHTML=`<p>Selecciona la definició que correspon a cada combinació.</p><div class="match-grid">${q.pairs.map((p,i)=>{const [a,c]=p.split('|');return `<label>${a} · ${c}</label><select class="match-answer" data-match="${i}"><option value="">Tria una definició...</option>${defs.map((d,n)=>`<option value="${n}">${d}</option>`).join('')}</select>`}).join('')}</div>`}else{trainAnswers.order=[...q.items.keys()];$("#quizCard").innerHTML=`<p>${q.orderPrompt||"Ordena els passos amb les fletxes."}</p><div class="order-list" id="orderList"></div>`;renderOrder()}renderConceptLinks(q)}
+    function renderConceptLinks(q){const text=[q.title,q.stem,q.why,...(q.options||[]),...(q.pairs||[])].join(' ').toLocaleLowerCase('ca');const found=Object.entries(dictionary).filter(([key])=>text.includes(key));if(!found.length)return;$("#quizCard").insertAdjacentHTML('beforeend',`<div class="concept-links"><small>Consulta els conceptes clau:</small>${found.map(([,d])=>`<a class="concept-link" href="${d.url}" target="_blank" rel="noopener" title="Obre ${d.source}">${d.label} ↗</a>`).join('')}</div>`)}
+    function renderOrder(){const q=quizBank[trainTrack][trainIndex];$("#orderList").innerHTML=trainAnswers.order.map((idx,pos)=>`<div class="order-item"><strong>${pos+1}</strong><span>${q.items[idx]}</span><span class="order-buttons"><button class="mini" data-up="${pos}" aria-label="Puja">↑</button><button class="mini" data-down="${pos}" aria-label="Baixa">↓</button></span></div>`).join('');$$('[data-up]').forEach(b=>b.onclick=()=>moveOrder(Number(b.dataset.up),-1));$$('[data-down]').forEach(b=>b.onclick=()=>moveOrder(Number(b.dataset.down),1))}
+    function moveOrder(pos,delta){const n=pos+delta;if(n<0||n>=trainAnswers.order.length)return;[trainAnswers.order[pos],trainAnswers.order[n]]=[trainAnswers.order[n],trainAnswers.order[pos]];renderOrder()}
+    function checkQuiz(){const q=quizBank[trainTrack][trainIndex];let ok=false;if(q.kind==='mc'){if(trainAnswers.choice===undefined)return showFeedback(false,"Selecciona una resposta abans de comprovar.",true);ok=trainAnswers.choice===q.answer;$$('[data-choice]').forEach(b=>{const n=Number(b.dataset.choice);b.disabled=true;if(n===q.answer)b.classList.add('correct');else if(n===trainAnswers.choice)b.classList.add('wrong')})}else if(q.kind==='match'){const vals=$$('.match-answer').map(e=>e.value);if(vals.some(v=>v===''))return showFeedback(false,"Completa totes les relacions abans de comprovar.",true);ok=vals.every((v,i)=>Number(v)===i);$$('.match-answer').forEach((e,i)=>{e.disabled=true;e.style.borderColor=Number(e.value)===i?'var(--green)':'var(--red)'})}else{ok=trainAnswers.order.every((v,i)=>v===q.order[i]);if(!ok){trainAnswers.order=[...q.order];renderOrder()}}if(ok)trainScore++;$("#trainScore").textContent=trainScore+" encert"+(trainScore===1?'':'s');showFeedback(ok,q.why,false);$("#checkQuiz").classList.add("hidden");$("#nextQuiz").classList.remove("hidden")}
+    function showFeedback(ok,text,warning){const f=$("#quizFeedback");f.className=`feedback ${ok?'ok':'ko'}`;f.innerHTML=`<strong>${warning?'Encara no.':ok?'Correcte!':'Revisa-ho.'}</strong>${text}`}
+    function nextQuiz(){const list=quizBank[trainTrack];trainIndex=(trainIndex+1)%list.length;renderQuiz()}
+    function setTrack(t){trainTrack=t;trainIndex=0;$$('.train-tab').forEach(b=>b.classList.toggle('active',b.dataset.trackname===t));renderQuiz()}
+    $$('.mode').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+    $$('.top-nav [data-navmode]').forEach(b=>b.addEventListener('click',()=>{setMode(b.dataset.navmode);$$('.top-nav button').forEach(x=>x.classList.toggle('active',x===b));document.querySelector('main').scrollIntoView({behavior:'smooth',block:'start'})}));
+    $$('.top-nav [data-scrollto]').forEach(b=>b.addEventListener('click',()=>{const target=document.getElementById(b.dataset.scrollto);if(target)target.scrollIntoView({behavior:'smooth',block:'start'})}));
+    $$('.train-tab').forEach(b=>b.addEventListener('click',()=>setTrack(b.dataset.trackname)));
+    $("#checkQuiz").addEventListener('click',checkQuiz);$("#nextQuiz").addEventListener('click',nextQuiz);$("#retryTrack").addEventListener('click',()=>{trainIndex=0;trainScore=0;$("#trainScore").textContent="0 encerts";renderQuiz()});
+    $("#newChallenge").addEventListener('click',()=>{current=(current+1)%challenges.length;renderChallenge();load()});
+    $("#toggleReadings").addEventListener('click',()=>$("#readings").classList.toggle('hidden'));
+    $$('textarea,input,select').forEach(e=>e.addEventListener('input',save));
+    $("#printBtn").addEventListener('click',()=>window.print());$("#downloadBtn").addEventListener('click',exportText);
+    $("#resetBtn").addEventListener('click',()=>{if(confirm('Vols esborrar la resposta d’aquest repte?')){localStorage.removeItem(storageKey());load()}});
+    populateAuthors();renderChallenge();setMode('guiada');
+  </script>
+</body>
+</html>
